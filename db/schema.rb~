@@ -37,9 +37,6 @@ ActiveRecord::Schema.define do
     t.string   "vetos_user_ids",       :default => ""
     t.integer  "vetos_count",          :default => 0
   end
-  add_index "answers", ["user_id"], :name => "index_answers_on_user_id"
-  add_index "answers", ["question_id"], :name => "index_answers_on_question_id"
-  add_index "answers", ["last_replied_user_id"], :name => "index_answers_on_last_replied_user_id"
 
   create_table "badges", :force => true do |t|
     t.string  "name",             :limit => 40
@@ -61,19 +58,15 @@ ActiveRecord::Schema.define do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-  add_index "blogs", ["user_id"], :name => "index_blogs_on_user_id"
-  add_index "blogs", ["last_replied_user_id"], :name => "index_blogs_on_last_replied_user_id"
 
   create_table "comments", :force => true do |t|
     t.integer  "user_id",                        :null => false
     t.text     "content"
-    t.integer  "commentable_id"#,          :default => 1
+    t.integer  "commentable_id",          :default => 1
     t.string   "commentable_type", :limit => 40
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-  add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
-  add_index "comments", ["commentable_id"], :name => "index_comments_on_commentable_id"
 
   create_table "doings", :force => true do |t|
     t.integer  "user_id"
@@ -86,9 +79,6 @@ ActiveRecord::Schema.define do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-  add_index "doings", ["user_id"], :name => "index_doings_on_user_id"
-  add_index "doings", ["venue_id"], :name => "index_doings_on_venue_id"
-  add_index "doings", ["last_replied_user_id"], :name => "index_doings_on_last_replied_user_id"
 
   create_table "events", :force => true do |t|
     t.integer  "eventable_id"
@@ -98,8 +88,6 @@ ActiveRecord::Schema.define do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-  add_index "events", ["user_id"], :name => "index_events_on_user_id"
-  add_index "events", ["eventable_id"], :name => "index_events_on_eventable_id"
 
   create_table "feedbacks", :force => true do |t|
     t.string   "text"
@@ -116,8 +104,6 @@ ActiveRecord::Schema.define do
     t.datetime "updated_at"
     t.boolean  "unread",                        :default => true
   end
-  add_index "follows", ["user_id"], :name => "index_follows_on_user_id"
-  add_index "follows", ["followable_id"], :name => "index_follows_on_followable_id"
 
   create_table "geos", :force => true do |t|
     t.string  "name",       :limit => 40
@@ -130,7 +116,6 @@ ActiveRecord::Schema.define do
     t.string  "latitude",   :limit => 40
     t.string  "longitude",  :limit => 40
   end
-  add_index "geos", ["parent_id"], :name => "index_geos_on_parent_id"
 
   create_table "grants", :force => true do |t|
     t.integer  "user_id",                      :null => false
@@ -139,8 +124,6 @@ ActiveRecord::Schema.define do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-  add_index "grants", ["user_id"], :name => "index_grants_on_user_id"
-  add_index "grants", ["badge_id"], :name => "index_grants_on_badge_id"
 
   create_table "kases", :force => true do |t|
     t.integer  "user_id"
@@ -159,9 +142,6 @@ ActiveRecord::Schema.define do
     t.integer  "last_replied_user_id"
     t.datetime "last_replied_at"
   end
-  add_index "kases", ["user_id"], :name => "index_kases_on_user_id"
-  add_index "kases", ["problem_id"], :name => "index_kases_on_problem_id"
-  add_index "kases", ["last_replied_user_id"], :name => "index_kases_on_last_replied_user_id"
 
   create_table "messages", :force => true do |t|
     t.integer  "from_user_id"
@@ -171,8 +151,6 @@ ActiveRecord::Schema.define do
     t.datetime "updated_at"
     t.boolean  "unread",       :default => true
   end
-  add_index "messages", ["from_user_id"], :name => "index_messages_on_from_user_id"
-  add_index "messages", ["to_user_id"], :name => "index_messages_on_to_user_id"
 
   create_table "notifications", :force => true do |t|
     t.integer  "user_id"
@@ -182,7 +160,7 @@ ActiveRecord::Schema.define do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-  add_index "notifications", ["notifiable_id"], :name => "index_notifications_on_notifiable_id"
+
   add_index "notifications", ["user_id"], :name => "index_notifications_on_user_id"
 
   create_table "oauth_tokens", :force => true do |t|
@@ -196,7 +174,6 @@ ActiveRecord::Schema.define do
     t.datetime "updated_at"
     t.string   "unique_id"
   end
-  add_index "oauth_tokens", ["user_id"], :name => "index_oauth_tokens_on_user_id"
 
   create_table "photos", :force => true do |t|
     t.integer  "user_id"
