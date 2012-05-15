@@ -36,6 +36,7 @@ gem 'whenever', :require => false
 
 group :development, :test do
   gem 'simplecov'
+  gem 'letter_opener'
   #gem 'webrat'
   #gem 'metric_fu'
   #gem 'ruby-debug'
