@@ -1,0 +1,23 @@
+<%= stylesheet_link_tag 'controllers/actionals' %>
+
+<div id='actionalQuestion'>
+  <%= link_to question.title, question %>
+
+  <span>
+    <% if question.answers_count.zero? %>
+      还没有人回答。
+    <% else%>
+      有<%= question.answers_count %>个回答。
+    <% end %>
+  </span>
+
+  <div id='actionalSpan'>
+    <span>
+      来自 <%= link_to question.user.login, question.user %> 的提问 
+    </span>
+    <span class="timeago">
+      <%= question.created_at %>
+    </span>
+  </div>
+  
+</div>

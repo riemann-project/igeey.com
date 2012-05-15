@@ -1,0 +1,7 @@
+<div class="event_box">
+  <%= render :partial => '/users/user', :object => record.user %>
+  <div class="event">
+    <p><%= link_to "+#{record.number}",record %> <span><%=record.formatted_done_at%></span></p>
+    <pre class="explanation"><%=record.detail%></pre>
+  </div>
+</div>

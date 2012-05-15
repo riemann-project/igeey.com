@@ -1,0 +1,53 @@
+<%= stylesheet_link_tag 'controllers/venues' %>
+
+<%= form_for @venue ,:html => { :multipart => true } do |form| %>
+  <%= raw error_explanation_for(@venue) if @venue.errors.present?%>
+  <p>
+  <%= form.label :name,'地点名称(必填)：'%> <%= form.text_field :name, :size => 18, :class => "title", :placeholder => "例如：XX社区，XX村"%>
+  </p>
+  <p>
+  <%= form.label :intro,'类型(必选)：'%><%= form.select :category ,Venue::CATEGORIES_HASH.invert%>
+  <% Venue::CATEGORIES_HASH.keys.each do |k|%>
+    <span class="category_example" id="category_example_<%=k%>"><%= image_tag "/images/venue/#{k}.png",:class=>"icon"%></span>
+  <% end %>
+  </p>
+  <p>
+  <%= form.label :intro,'所在城市(必选)：'%> <%= (geo_selector("venue", "geo",nil,@venue.geo)) if false %>
+  </p>
+  <p>
+  <%= form.label :address,'具体地址：'%> <%= form.text_field :address,:size => 18%>
+  </p>
+  <p>
+  <%= form.label :contact,'联系方式(可选)：'%> <%= form.text_field :contact,:size => 18%>
+  </p>
+  <p>
+  <%= form.label :cover,'一张这里的照片：'%> <%= form.file_field :cover,:size => 18%>
+  </p>
+  <p>
+  <%= form.label :intro,'简介(必填)：'%><span>100字以内</span>
+  <br/>
+  <%= form.text_area :intro, :id => 'introArea', :placeholder => "为地点写篇100字以内的简介吧"%>
+  <div class="explanation">剩余字数：<span id="character_count"></span></div>
+  </p>
+
+  <%= form.hidden_field :latitude %>
+  <%= form.hidden_field :longitude %>
+  <%= form.hidden_field :zoom_level %>
+  <%= hidden_field_tag :back_path,params[:back_path]%>
+  <p>
+  <%= form.submit '填写好了，提交',:class => "button"%>
+  <%= button_to_function '取消',"javascript:window.location=('#{@venue.new_record? ? geos_path : venue_path(@venue)}')",:class => "button"%>
+  </p>
+<% end %>
+
+<% content_for :extension do %>
+  <script type="text/javascript">
+    function updateCount() {
+      document.getElementById("character_count").innerHTML = 100 - document.getElementById("venue_intro").value.length;
+      $(".category_example").hide();$("#category_example_" + $('#venue_category').val()).show();
+      setTimeout(updateCount, 400);
+    }
+updateCount();
+</script>
+
+<% end %>

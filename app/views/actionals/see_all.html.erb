@@ -1,0 +1,22 @@
+<% @title = @actional.name %>
+
+<div class="box">
+
+  <h3>和 <%= link_to @actional.name, @actional %> 有关的问题</h3>
+  <%= render :partial => "/public/item", :collection => @items %>
+  <%= will_paginate @items %>
+
+  <% if logged_in? %>
+    <%= render '_question_form', :locals => { :question => @question, :actional => @actional } %>
+  <% else %>
+    <p>
+    <%= link_to "立即登录", login_path, :class => "open_dialog" , :title => '登录', :id => "login" %> 即可提问。
+    <%= render 'public/more_sync_link' %>
+    </p>
+  <% end %>
+
+</div>
+
+<% content_for :sidebar do %>
+
+<% end %>

@@ -1,0 +1,20 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+# This model initially had no columns defined.  If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+beijing:
+  id: 1
+  name: 北京
+  latitude: 39.9046670
+  longitude: 116.4081980
+
+shanghai:
+  id: 79
+  name: 上海
+  latitude: 31.2307080
+  longitude: 121.4729160
+  
+#  two: {}
+#  column: value

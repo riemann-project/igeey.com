@@ -1,0 +1,29 @@
+igeey.com - plan,record and spread your good action.
+
+powered by Ruby on Rails 3
+
+Step 1: clone repository
+  git clone git://github.com/igee/igeey.com.git
+
+Setp 2: install dependent gems
+  cd project_path
+  bundle install
+
+Step 3: edit your database configuration file
+  cp config/database.yml.sample config/database.yml
+  vi config/database.yml
+
+Step 4: edit your local config file
+  cp config/config.yml.sample config/config.yml
+  vi config/config.yml
+
+Step 5: init statics file
+  touch public/json/venues.json
+ 
+Step 6: db migration & load fixtures 
+  rake db:create
+  rake db:auto:migrate
+  rake db:fixtures:load FIXTURES_PATH=db/fixtures
+  
+Step 7: Go!launch!
+  rails s  

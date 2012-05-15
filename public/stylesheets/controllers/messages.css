@@ -1,0 +1,15 @@
+#messageConten{
+clear:both;
+}
+
+#messageButton{
+clear:both;text-align:right;
+}
+
+#eventBox{
+	background-color:#F8F8FF;
+}
+
+.fullDate{
+	margin-left:10px;
+}

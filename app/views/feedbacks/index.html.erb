@@ -1,0 +1,9 @@
+<%= stylesheet_link_tag 'controllers/feedbacks' %>
+
+<% @feedbacks.each do |feedback|%>
+  <div id='feedbackContent'>
+    <p><%= feedback.text %></p>
+    <span><%= feedback.email %> @<%= format_date feedback.created_at %></span>
+  </div>
+<% end %>
+<%= will_paginate @feedbacks %>

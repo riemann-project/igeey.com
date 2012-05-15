@@ -1,0 +1,20 @@
+#introArea{
+	width:320px;
+	height:100px;
+}
+#venueCoverUrl{
+	float:left;
+	width:100px;
+	height:100px;
+	margin-right:10px;
+}
+#venueNameLink{
+	height:36px;
+}
+#venueEdit{
+	padding:0 20px;
+}
+#venueNew{
+padding:0 20px;
+}
+

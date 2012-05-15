@@ -1,0 +1,213 @@
+<%= stylesheet_link_tag 'controllers/venues' %>
+
+<% @title = "地点：#{@venue.name}" %>
+
+<% content_for :head do %>
+  <%= javascript_include_tag 'calendar.js' %>
+  <script type="text/javascript" src="http://ditu.google.cn/maps/api/js?sensor=false"></script>
+  <%= javascript_include_tag 'jquery.tag.editor-min.js' %>
+<% end %>
+
+<div class="box">
+  <div id="venue_head">
+    <%= image_tag(@venue.cover.url(:_100x100),:alt => @venue.name,:style => "float:left;width:100px;height:100px;margin-right:10px") if @venue.cover_file_name%>
+    <div style="margin-left:124px">
+      <div style="float:right"><%= raw(follow_to(@venue)) %></div>
+      <h2 style="margin:4px 0"><%= @venue.name%> <span><%= @venue.geo.full_name %></span></h2>
+      <pre><%= @venue.intro%></pre>
+      <span>
+        <%= "地址： #{@venue.address}" unless @venue.address.blank?%>
+        <%= raw("　联系方式： #{@venue.contact}") unless @venue.contact.blank?%>
+      </span>
+      <% if @venue.creator == current_user%>
+        <br/>
+        <span>
+          <%= link_to '更新主题图',cover_venue_path(@venue)%>
+          <%= link_to '更新信息',edit_venue_path(@venue)%>
+        </span>
+      <% end %>
+    </div>
+  </div>
+  <%= render :partial => '/public/share' %>
+</div>
+
+<div class="box">
+  <div id="venue_forms">
+    <div id="formContaier">
+      <%= form_for @saying,:html=>{:class=>'venue_form',:style => "display:block"}  do |form| %>    
+        <%= form.hidden_field :venue_id,:value => @venue.id %>
+        <%= form.text_area  :content,:style => 'height:18px;font-size:14px;line-height:18px',:placeholder => "今天你想和#{@venue.name}的朋友们说什么？"%>
+        <%= form.submit '确 定',:class => "gary_button"%>
+      <% end %>
+
+      <% if logged_in?%>
+        <%= form_for @photo,:html => { :multipart => true,:class => "venue_form" } do |form| %>       
+          <%= form.hidden_field :venue_id,:value => @venue.id %>
+          <%= form.label :title,'选择文件：'%> <%= form.file_field :photo,:style => "background:none;border:none;font-size:13px" %>
+          <%= form.text_area :detail,:placeholder => '说说这张照片的背后的故事吧？'%>
+          <%= form.label :tag_list,'添加标签：',:style=>"float:left"%>
+          <%= form.text_field :tag_list,:class => 'tag_list' %><br/>
+          <span class="suggested_tags">我收藏的标签：<%= raw(tag_links_for(current_user.tag_list,10))%></span>
+          <br/>
+          <%= form.submit '确 定',:class => "gary_button"%>
+        <% end %>
+
+        <%= form_for @topic,:html=> {:class=>'venue_form'}  do |form| %>
+          <%= form.hidden_field :venue_id ,:value => @venue.id %>
+          <%= form.label :title,'标题：'%> <%= form.text_field :title,:size => 30,:placeholder => ''%><br/>
+          <%= form.text_area :content,:style => "height:96px",:placeholder => '故事的正文，不限字数!'%>
+          <%= form.label :tag_list,'添加标签：',:style=>"float:left"%>
+          <%= form.text_field :tag_list,:class => 'tag_list' %><br/>
+          <span class="suggested_tags">我收藏的标签：<%= raw(tag_links_for(current_user.tag_list,10))%></span>
+          <br/>
+          <%= form.submit '确 定',:class => "gary_button"%>
+        <% end %>
+
+        <%= form_for @task ,:html => { :multipart => true,:class => "venue_form" } do |form| %>
+          <%= raw error_explanation_for(@task) if @task.errors.present?%>
+          <%= form.hidden_field :venue_id,:value => @venue.id %>
+          <p>
+          <%= form.label 'title','目标：'%> <span>请用一句话描述你的任务目标 (20字以内)</span> 
+          <br/>
+          <%= form.text_field :title, :style => "width:400px", :placeholder => "" %>
+          <p class="explanation">目前字数：<span id="character_count"></span></p>
+          </p>
+          <p>
+          <%= form.label 'detail','任务要求：'%>
+          <span>你对参加者完成你的任务有什么要求或提示。</span>
+          <%= form.text_area :detail, :style => "width:440px;height:90px"%>
+          </p>
+          <p>
+          <%= form.label 'total_people','截止时间：'%><%= form.text_field :do_at, :size => 8,:class => 'with_calendar',:placeholder => ""%>
+          </p>
+          <p>
+          <%= form.label :tag_list,'添加标签：',:style=>"float:left"%>
+          <%= form.text_field :tag_list,:class => 'tag_list' %>
+          <br/>
+          <span class="suggested_tags">我收藏的标签：<%= raw(tag_links_for(current_user.tag_list,10))%></span>
+          </p>
+          <p>
+          <%= form.label :cover,'主题图：'%> <%= form.file_field :cover,:size => 18%>
+          </p>
+          <%= form.submit '确 定',:class => "gary_button"%>
+        <% end %>
+      <% end %>
+    </div>
+    <ul id="formTabs">
+      <li><%= link_to raw("#{image_tag('/images/icon/saying.png',:class => 'icon')} 报到"),'#new_saying',:class=> "active"%></li>
+      <li><%= link_to raw("#{image_tag('/images/icon/photo.png',:class => 'icon')} 上传照片"),'#new_photo'%></li>
+      <li><%= link_to raw("#{image_tag('/images/icon/text.png',:class => 'icon')} 写故事"),'#new_topic'%></li>
+      <li><%= link_to raw("#{image_tag('/images/icon/speaker.png',:class => 'icon')} 发布任务"),'#new_task'%></li>
+    </ul>
+  </div>
+</div>
+
+<div class="box">
+  <div style="float:right">
+    <span>
+      <%= render 'link', locals => { :venue => @venue } %>
+    </span>
+  </div>
+  <h4>这里正在发生.. </h4>
+  <%= render :partial => '/public/event', :collection => @timeline[0..9] %>
+  <%= link_to raw("查看更多..."),more_items_venue_path(@venue,:page => 2),:class => "timeline_footer",:onclick=>"javscript:more_timeline($(this));return false" if @timeline[10].present?%>
+</div>  
+
+<% content_for :sidebar do %>
+  <div class="box">
+    <span style="float:right"><%= link_to "查看大图",position_venue_path(@venue),:class => 'open_dialog',:title => '地点地图'%></h4></span>
+  <h5>地图：</h5>
+  <div id="sidebar_map_canvas" style="width:248px;height:160px;"></div>
+</div>
+
+<div class="box">
+  <span style="float:right"><%= link_to "查看全部",followers_venue_path(@venue)%></h4></span>
+<h5><%= "#{@venue.follows.size}人关注这里："%></h5>
+<%= render :partial => "/users/user", :collection => @followers[0..7] %>
+  </div>
+
+  <% unless @venue.tag_list.empty? %>
+    <div class="box">
+      <h5>关联标签：</h5>
+      <%= raw tag_list_for(@venue.tag_list)%>
+    </div>
+  <% end %>
+<% end %>
+
+<% content_for :extension do %>
+  <script type="text/javascript">
+    function initialize() {
+      var latlng = new google.maps.LatLng(<%= "#{@venue.latitude || 35.0},#{@venue.longitude || 105.0}"%>)
+        var myOptions = {
+zoom: 14 ,
+      center: latlng,
+      disableDefaultUI: true,
+      navigationControl: true,
+      mapTypeControl: true,
+      mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+      scaleControl: false,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+      small_map = new google.maps.Map(document.getElementById("sidebar_map_canvas"), myOptions);
+
+      markers = new Array();
+      markers['position'] = new Array();
+      markers['position'][0] = new google.maps.Marker({
+          //icon: '/images/venue/<%= @venue.category %>.png',
+map: small_map,
+position: small_map.getCenter(),
+title: '<%= @venue.name %>'
+});    
+infowindow = new google.maps.InfoWindow;     
+}; //initialize_end
+
+$(document).ready(function(){
+    <% if logged_in? %>  
+      $("#formTabs li a").click(function(){ 
+        var activeTab = $(this).attr("href"); 
+        $("#formTabs li a").removeClass("active"); 
+        $(this).addClass("active");
+        $("#formContaier form").hide();
+        $(activeTab).fadeIn();
+        $("#formContaier").slideDown();
+        return false;
+        });
+    <% else %>
+      $("#formTabs li a").click(function(){$('#login').click();return false;})
+    <% end %>
+
+    $('.new_comment').submit(function(){
+      var size = $(this).find('input[type=text]').val().length
+      if ( size >= 140){
+      alert('回复不能超过140字,你写了' + size + '个');
+      return false;
+      }
+      })      
+$('#new_saying').submit(function(){
+    var size = $(this).find('textarea').val().length
+    if ( size >= 140){
+    alert('报到不能超过140字,你写了' + size + '个');
+    return false
+    }          
+    });
+DateTimeShortcuts.init()
+  function updateCount() {
+    $("#character_count").html(($("#task_detail").attr('value') || '').length);
+    setTimeout(updateCount, 400);
+  }
+updateCount();
+$('#saying_content').focus(function(){$(this).attr('style','height:36px')});
+$('#saying_content').blur(function(){$(this).attr('style','height:18px')});
+
+initialize();
+$(".tag_list").each(function(index,element){jQuery(element).tag_cloud();})
+  $('.suggested_tags a').click(function(){
+      var dom =$(this).parent().prevAll(".tag_list");
+      dom.attr('value',$(this).html());
+      dom.blur();
+      return false;
+      });
+setTimeout(function(){$.post('<%= watching_venue_path(@venue)%>')},5000)
+});  
+</script>
+<% end %>

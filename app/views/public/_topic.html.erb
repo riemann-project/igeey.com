@@ -1,0 +1,29 @@
+<% venue = venue || topic.venue %>
+<% user = user || topic.user %>
+
+<div class="event_box">
+  <%= controller_name == 'user' ? (render :partial => "/venues/venue",:object => venue) : (render :partial => "/users/avatar",:object => user)%>
+  <div class="event">  
+    <span>
+      <%= image_tag('/images/icon/topic.png',:class => 'icon')%>
+      <%= raw("#{link_to user.login,user_path(user)}") unless controller_name == 'users'%>
+      <%= raw("在 #{link_to venue.name,venue_path(venue)} ") unless controller_name == 'venues' %>写了故事：
+    </span>
+    <p><b><%= link_to topic.title,topic_path(topic) %></b></p>
+    <pre class="explanation"><%= truncate(topic.content,72)%></pre>
+
+    <div class="event_info">
+      <span><%= raw "by #{link_to user.login,user}" unless ['users','venues'].include?(controller_name) %></span>
+      <span class="timeago"><%= topic.created_at %></span>
+      <span>标签： <%= raw tag_links_for(topic.tag_list)%></span>
+    </div>
+    <div class="event_action">
+      <% if topic.owned_by?(current_user) %>
+        <%= link_to "删除","#{topic_path(topic)}?back_path=#{request.path}",:method => :delete,:confirm => '你确定要删除这条报到么？'%> |
+        <%= link_to "编辑","#{edit_topic_path(topic)}?back_path=#{request.path}"%> |
+      <% end %>
+      <%= link_to "回复#{'(' + topic.comments_count.to_s + ')' if topic.comments_count > 0}",'',:class => "event_reply", :onclick=>("javascript:redirect_clear(#{topic.id},'Topic')" if logged_in?)%>　
+    </div>
+    <%= render :partial => "/public/reply_form",:locals =>  {:object => topic}%>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+#userAvatar {
+  float:left;
+  text-align:center;
+  width:100px;
+}
+#userAvatarUrl{
+  float:left;
+  width:72px;
+  height:72px;
+  margin-right:10px;
+}
+#settingAvatar{
+  float:right;
+  width:500px;
+  margin-top:-10px;
+}
+#userInfoLink{
+  border-top:1px solid #eee;
+}
+#newMessage{
+  float:right;
+}
+#contentContaier{
+  float:left;
+  width:500px;
+  text-align:left;
+  padding:5px;
+}
+#welcomeContent{
+  padding:4px 10px;
+}
+#welcomeLink{
+  text-align:right;
+}
+#backLink{
+  text-align:right;
+}
+#syncLink{
+  line-height:36px;
+  margin-top:10px;
+}
+#oauthSignup{
+  width:510px;
+}
+#submitTag{
+  text-align:right;
+}
+#oauthLogin{
+  padding:5px 15px 15px 15px;
+}
+#usersNew{
+  width:510px;
+}
+#newSubmitTag{
+  text-align:center;
+}
+#loginWithIP{
+  border: none;
+}

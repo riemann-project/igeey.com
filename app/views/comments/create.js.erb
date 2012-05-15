@@ -1,0 +1,8 @@
+<% @reply = @comment %>
+<% @id = "##{@reply.commentable.class.to_s.downcase}_#{@reply.commentable.id}_replies"%>
+<% unless @reply.content.blank?%>
+  $('<%= @id%>').append("<%= escape_javascript(render :partial => '/public/reply',:object=> @reply) %>"); 
+
+  //some hard core here
+  $('<%= @id %>').next().find('textarea').val("");
+<% end %>

@@ -1,0 +1,27 @@
+<%= stylesheet_link_tag 'controllers/actionals' %>
+
+<%= form_for @actional, :html => { :multipart => true } do |form| %>
+  <p>
+  <%= form.label :name, '行动标题：'%> 
+  <%= form.text_field :name, :size => 20%>
+  </p>
+  <p>
+  <%= form.label :intro, '行动介绍：', :id => 'introLable' %>
+  <%= form.text_area :intro, :id => 'actionalIntro' if false %>
+  </p>
+  <p>
+  <%= form.label :method, '行动方法：', :id => 'actionalMethodLable' %>
+  <%= form.text_area :method, :id => 'actionalMethod' if false %>
+  </p>
+  <p>
+  <%= form.label :cover, '图标文件：'%>
+  <%= form.file_field :cover, :style => "" %>
+  <br/>
+  <%= image_tag @actional.cover.url(:_64x64) if @actional.cover_file_name %>
+  </p>
+
+  <p id='introButton'>
+  <%= submit_tag '确定' %>
+  <%= button_to_function '取消', "javascript:window.history.back()", :class => "button" %>
+  </p>
+<% end %>

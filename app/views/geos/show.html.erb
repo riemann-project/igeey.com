@@ -1,0 +1,72 @@
+<%= stylesheet_link_tag 'controllers/geos' %>
+
+<% @title = '地图'%>
+
+<% content_for :head do %>
+  <script type="text/javascript" src="http://ditu.google.cn/maps/api/js?sensor=false"></script>
+<% end %>
+
+<div id='newVenue'><%= link_to '添加地点',new_venue_path%></div>
+<h2 style="display:inline"><%= @geo.name if false %></h2> <%= link_to '切换地区',list_geos_path,:class => 'open_dialog',:title => '切换地区'%>
+
+<div id="map_canvas" style="height:360px;clear:both;margin-top:6px"></div>
+
+<div class="box">
+  <h4>最新被提交的地点</h4>
+  <p class="explanation">
+  <% @venues.each do |venue|%>
+    <%= link_to venue.name, venue_path(venue) if false %>　
+  <% end %>
+  </p>
+</div>
+
+<% content_for :sidebar do %>
+  <%= render '/venues/what_is_venue'%>
+<% end %>
+
+<% content_for :extension do %>
+  <script type="text/javascript">
+    function initialize() {
+      var latlng = new google.maps.LatLng(<%= "#{@geo.latitude || 35.0},#{@geo.longitude || 105.0}"%>)
+        var myOptions = {
+zoom: <%= @geo.zoom_level || 4%>,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+      map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+      geocoder = new google.maps.Geocoder();
+      markers = new Array
+
+        $.getJSON("/json/venues.json?<%= Venue.first.id unless Venue.first.nil? %>", function(data){
+            $.each(data, function(i,item){
+              markers[i] = new google.maps.Marker({
+icon: "/images/marker/" + item.venue.category + ".png",
+position: new google.maps.LatLng(parseFloat(item.venue.latitude), parseFloat(item.venue.longitude)),
+title: item.venue.name,
+map: map
+});
+              google.maps.event.addListener(markers[i], "click", function(){
+                $.ajax({
+url:"/venues/" + item.venue.id + ".xml",
+success:function(data, textStatus, XMLHttpRequest){new google.maps.InfoWindow({content:XMLHttpRequest.responseText}).open(map,markers[i]);},
+dataType:'xml'
+})
+                })
+              });
+            });
+
+marker = new google.maps.Marker({
+position: map.getCenter(), 
+title: "地点坐标",
+draggable: true,
+zindex: 100
+});
+
+}; //initialize_end()
+
+$(document).ready(function(){
+    initialize();
+    $('#locate').submit(function(){geocoding($('#address').attr('value'))})
+    });  
+  </script>
+<% end %>  

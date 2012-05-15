@@ -1,0 +1,1 @@
+<%= link_to(votes_path(:voteable_id => @solution.id,:voteable_type => @solution.class.to_s,:back_path => request.fullpath), :remote => (true if logged_in?),:method => :post,:id => "solution_vote_#{@solution.id}",:class => 'vote', :title => '有帮助') %>

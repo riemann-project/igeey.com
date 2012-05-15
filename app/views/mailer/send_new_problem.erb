@@ -1,0 +1,7 @@
+# encoding: utf-8
+新问题提交:<%= @problem.title if false %>
+
+<%= @problem.intro if false %>
+
+提交用户： <%= @problem.user_id ? @problem.user.login : '匿名用户' if false %>
+<%= url_for(@problem) if false %>

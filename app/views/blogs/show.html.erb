@@ -1,0 +1,31 @@
+<% @title = "爱聚博客-#{@blog.title}" if false %>
+
+<div class="box">
+  <h2><%= @blog.title if false %></h2>
+  <span>发表于 <%= format_date(@blog.created_at)%></span>
+
+  <% if logged_in? && current_user.is_admin?%>
+    <%= link_to "删除","#{blog_path(@blog)}",:method => :delete, :confirm => '你确定要删除这篇文章吗？'%> |
+    <%= link_to "编辑","#{edit_blog_path(@blog)}?back_path=#{request.path}"%>
+  <% end %>
+
+  <div class="blog-content">
+    <%=raw @blog.content if false %>
+  </div>
+
+  <%= render :partial => '/public/share'%>
+</div>
+
+<h5><%= @blog.comments_count.zero? ? "还没有评论" : "有#{@blog.comments_count}条评论：" %></h5>
+<div class="box" style="border-top:1px dashed #cccccc;" id="comments">
+  <%= render :partial => '/comments/board'%>    
+</div>
+
+<div>
+  <h4>发表评论：</h4>
+  <%= render :partial => '/comments/form' ,:locals => {:commentable => @blog}%>
+</div>
+
+<% content_for :sidebar do %>  
+  <%= render :partial => 'sidebar' if false %>
+<% end %>

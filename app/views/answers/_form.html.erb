@@ -1,0 +1,7 @@
+<%= stylesheet_link_tag 'controllers/answers' %>
+
+<%= form_for [@question,@answer] do |form| %>
+  <%= form.hidden_field :question_id , :value => @question.id %>
+  <%= form.text_area :content, :id => 'answerContent' %>
+  <%= form.submit '提交'%> 
+<% end %>

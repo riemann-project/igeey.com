@@ -1,0 +1,4 @@
+<% @title = '记录行动'%>
+<% @record.photos.build if @record.photos.empty? %>
+<h3>任务记录：<%= @record.task.title %></h3>
+<%= render "form" %>

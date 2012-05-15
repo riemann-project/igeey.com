@@ -1,0 +1,35 @@
+<%= stylesheet_link_tag 'controllers/users' %>
+
+<% @title = '注册'%>
+<% @site_hash = {"sina" => "新浪微薄", "douban" => "豆瓣"}%>
+<div id='oauthSignup'>
+  <h2>请填写您将要在爱聚使用的用户名和邮箱：）</h2>
+  <% @user.password = @user.password_confirmation = nil %>
+
+  <%= raw error_explanation_for(@user) if @user.errors.present?%>
+
+  <div class="dialog_leftbar">
+    <%= form_for :user, :url => oauth_user_create_path do |f| -%>
+      <p>
+      <%= f.label 'login','用户名：' %>
+      <%= f.text_field :login,:size => 20, :value => "#{@user_name}" %>
+      </p>
+
+      <p>
+      <%= f.label 'email','　邮箱：' %>
+      <%= f.text_field :email, :size => 20, :placeholder => '方便日后找回密码哦' %>
+      </p>
+
+      <p id='submitTag'>
+      <%= submit_tag '提交' %>
+      </p>
+
+    <% end -%>
+  </div>
+  <div class="dialog_rightbar">
+    <p id='oauthLogin'>
+    如果已经注册了，但还没有连接<%= @site_hash[@site]%>，
+    <%= link_to '登录',oauth_login_path,:class => 'open_dialog', :title => '登录并连接'%>后即可直接连接
+    </p>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="box">
+
+  <% if logged_in?%>
+    <%= render :partial => '/users/user', :object => current_user %>
+    <div style="padding:4px;float:left">
+      <div>
+        <%= form_for Comment.new do |form| %>
+          <%= form.hidden_field :commentable_type,:value => commentable.class %>
+          <%= form.hidden_field :commentable_id,:value => commentable.id %>
+          <%= form.text_area :content, :style => "width:530px;height:60px",:placeholder => "告诉大家你的想法,为了让世界变好一点点"%>
+          <% if current_user.is_admin %>
+            <%= check_box_tag :offcial %>使用官方帐号发表
+          <% end %>
+          <%= submit_tag '写好了！',:disable_with => '发送中..' ,:style => "float:right"%>
+        <% end %>
+      </div>
+
+    </div>
+  <% else %>
+    <p>
+    <%= link_to "立即登录",login_path,:class => "open_dialog" ,:title => '登录',:id => "login"%> 即可留言
+    <br/>or<br/>
+    <%= link_to((image_tag "/images/icon/sina_login.gif"),:controller => 'oauth', :action => 'sina')%>
+    <%= link_to((image_tag "/images/icon/douban_login.gif"),:controller => 'oauth', :action => 'douban')%>
+    </p>
+
+  <% end %>
+</div>

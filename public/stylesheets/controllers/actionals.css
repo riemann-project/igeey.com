@@ -1,0 +1,52 @@
+#actionalCover{
+	float:left;margin:5px;
+}
+#actionalIntro{
+height:100px;width:400px;margin-left:75px;
+}
+
+#actionalMethod{
+height:100px;width:400px;margin-left:75px;
+}
+
+#actionalMethodLable{
+float:left;
+}
+
+#actionalQuestion{
+padding:10px 4px;border-bottom:1px dashed #ccc;
+}
+
+#actionalSpan{
+margin-top:3px;
+}
+
+#actionalIndex{
+width:200px;float:right;
+}
+
+#actionalFollows{
+float:right;position:relative;top:3px;
+}
+
+#introLable{
+float:left;
+}
+#introButton{
+	margin-left:75px;
+}
+#showActional{
+	padding-bottom:10px;
+}
+#actionalFav{
+	float:right;
+}
+#iconAndMethod{
+	border:1px solid #ddd;border-top-color:#eee;padding:5px 25px 10px;margin:0 60px 0;
+}
+#icon{
+	text-align:center;border-bottom:1px solid #eee;padding:5px;color:#bbb;font-size:13px;
+}
+#backgroundShadow{
+	background:url('/images/shadow.png') no-repeat;height:10px;margin:0 60px 20px;
+}

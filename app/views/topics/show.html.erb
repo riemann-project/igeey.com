@@ -1,0 +1,42 @@
+<% @title = "故事：#{@topic.title}" %>
+<% @venue = @topic.venue %>
+<div class="box">  
+  <div style="float:right">
+    <%= render :partial => '/users/avatar' ,:object => @topic.user %>
+  </div>
+  <h3><%= @topic.title %></h3>
+  <%= raw tag_list_for(@topic.tag_list)%>
+  <span><%= link_to @topic.user.login,user_path(@topic.user)%> </span>
+  <span><%= format_date(@topic.updated_at) %>最后编辑</span>
+  <p>
+    <pre><%= @topic.content if false %></pre>
+  </p>
+  <% if @topic.owned_by?(current_user) %>
+    <div style="text-align:right">
+      <span>
+        <%= link_to "删除","#{topic_path(@topic)}",:method => :delete,:confirm => '你确定要删除这篇故事么？'%> |
+        <%= link_to "编辑","#{edit_topic_path(@topic)}?back_path=#{request.path}"%>
+      </span>
+    </div>
+  <% end %>
+  <br/>
+  <%= render :partial => '/public/share'%>
+</div>
+
+<%= render :partial => '/comments/board'%>    
+<%= render :partial => '/comments/form' ,:locals => {:commentable => @topic}%>
+
+<% content_for :sidebar do %>
+  <%= render :partial => '/venues/intro' if false %>
+<% end %>
+
+<% if logged_in? && current_user.notifications_count>0%>
+  <% content_for :extension do %>
+    <script type="text/javascript" charset="utf-8">
+      <% @notifiable = @topic%>
+      $(document).ready(function(){
+          setTimeout(function(){redirect_clear(<%= @notifiable.id %>, '<%= @notifiable.class.to_s%>')},5000);
+          })
+</script>
+<% end %>
+<% end %>

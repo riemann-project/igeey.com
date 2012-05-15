@@ -1,0 +1,16 @@
+<div class="event_box">
+  <div class="event" style="width:610px;">
+    <a name=<%= "kase_#{kase.id}"%>>
+    <% unless kase.photo_file_name? %>
+ <div style="text-align:center;"><%= link_to (image_tag kase.photo.url(:_360x270)), ''%></div>
+    <% end %>
+    <pre style="margin:5px 20px 5px 20px;"><%= kase.intro %></pre>
+  </div>
+  <div class="event_info">
+    <span>发现者：<%= kase.user.login%> | 提交于：<%= full_date(kase.created_at)%> | 发现地：<%= kase.address %></span>
+  </div>
+  <div class="event_action">
+    <%= link_to "回复#{'(' + kase.comments_count.to_s + ')' if kase.comments_count > 0}",'',:class => "event_reply",:onclick=>("javascript:redirect_clear(#{kase.id},'kase')" if logged_in?)%>
+  </div>
+  <%= render :partial => "/public/reply_form",:locals =>  {:object => kase}%>
+</div>

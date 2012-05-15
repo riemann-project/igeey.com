@@ -1,0 +1,10 @@
+<%= stylesheet_link_tag 'controllers/venues' %>
+
+<div class="venue">
+  <%= link_to image_tag(venue.cover.url(:_48x48), :class => "venue_thumb_cover", :alt => venue.name),venue,:title => venue.name %>
+  <% if defined? with_name%>
+    <div id='venueNameLink'>
+      <span><%= link_to truncate(venue.name, :length => 10), venue if false %></span>
+    </div>
+  <% end %>
+</div>

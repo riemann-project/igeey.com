@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN"> 
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>爱聚-<%= @title%></title>
+    <link href="/favicon.ico" rel="shortcut icon"/>
+    <%= stylesheet_link_tag :all %>
+    <%= javascript_include_tag 'jquery-1.4.2.min.js' %>
+    <%= javascript_include_tag 'rails.js' %>
+    <%= javascript_include_tag 'dialog.js' %>
+    <%= javascript_include_tag 'jquery.poshytip.min.js' %>
+    <%= javascript_include_tag 'jquery.hint.js' %>
+    <%= javascript_include_tag "jquery.timeago.js" %>
+    <%= javascript_include_tag 'application.js' %>
+    <%= javascript_include_tag 'autoresize.jquery.min.js' %>
+    <%= csrf_meta_tag %>
+    <%= yield :head %>
+    <meta content="通过大众的智慧和行动推动身边公共问题的解决。" name="description">
+    <meta content="公共问题,公益,群体智慧,解决" name="keywords">
+  </head>
+
+  <body>  
+    <div id="get_badges"></div>
+    <div id="header">
+      <div class="container">
+        <%= link_to(image_tag('/images/logo.png'),root_path,:id => "logo")%>
+        <%= link_to(image_tag('/images/blog.png'),root_path,:id => "blog_logo") if controller_name == 'blogs' || (controller_name == 'site' && action_name == 'index')%>
+        <%= link_to(image_tag('/images/problem.png'),root_path,:id => "blog_logo") if ['problems','kases','solutions'].include?(controller_name) %>
+        <div id="nav">
+          <div id="status">
+            <% if logged_in? %>
+              <%= link_to current_user.login,user_path(current_user)%> |
+              <% unless current_user.notifications_count.zero? %>
+                <%= link_to raw("提醒(#{current_user.notifications_count})"),notifications_path,:style => "color:#fd7"  %> |
+              <% end %>
+              <%= link_to raw("站内信(#{current_user.unreadbox.count})"),messages_path,:style => (current_user.unreadbox.count.zero? ? 'color:#fff' : "color:#fd7") %></span> |
+            <%= link_to '设置',"#{setting_path}?back_path=#{request.path unless controller_name == 'site' && action_name == 'index'}"%> | 
+            <%= link_to "退出",logout_path %>
+          <% else %>
+            <%= link_to "登录",login_path,:class => "open_dialog" ,:title => '登录',:id => "login"%> |
+            <%= link_to "注册",signup_path ,:class => "open_dialog",:title => '注册',:id => "signup"%>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="content">
+    <table class="container">
+      <tr>
+        <td id="main">
+          <% if flash[:msg] -%>
+            <div id="msg_flash"><%= raw flash[:msg]%></div>
+          <% end -%>
+          <% if flash[:dialog] -%>
+            <div id="dialog_flash"><%= raw flash[:dialog] %></div>
+          <% end -%>
+          <% if flash[:error] -%>
+            <p class="error"><%= flash[:error] %></p>
+          <% end -%>
+          <%= yield %>
+        </td>
+        <td id="sidebar">
+          <%= yield :sidebar %>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="footer">
+    <div class="container">
+      <ul id="footer_links">
+        <li>©2008-2010</li>
+        <li><%= link_to '关于',about_path%></li>
+        <li><%= link_to '爱聚博客',root_path%></li>
+        <li><%= link_to '公益问答',questions_path,:class => "#{'selected' if request.path == '/question'}"%></li>
+        <li><%= link_to "地点动态",timeline_path,:title => '动态', :class => "#{'selected' if request.path == '/timeline'}" %></li>
+        <li><%= link_to '爱聚帮助',tag_path('爱聚帮助')%></li>
+        <%= form_tag search_path,:id => 'search_box',:method => :get do%>
+          <%= text_field_tag 'keywords', @keywords,:placeholder => '搜索爱聚的地点、用户' %><%= submit_tag '',:id => "magnifier"%>
+        <% end %>
+      </ul>    
+    </div>
+  </div>
+
+  <%= yield :extension %>
+
+  <% if logged_in? %>
+    <script type="text/javascript">
+      $(document).ready(function(){
+          <% if current_user.has_new_badge? %>
+            $.get('<%= get_badges_badges_path%>',function(data){
+              $('#get_badges').html(data)
+              })
+          <% end %>
+          <%= "$('.user[user_id=#{current_user.id}]').parent().addClass('by_self')" %>
+          })
+        </script>
+      <%end%>
+
+      <% if APP_CONFIG['google_analytics_id'].present? %>  
+        <script type="text/javascript">
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', '<%= APP_CONFIG['google_analytics_id']%>']);
+          _gaq.push(['_trackPageview']);
+          (function() {
+           var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+           ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+           var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+           })();
+         </script>
+       <% end %>
+     </body>
+   </html>

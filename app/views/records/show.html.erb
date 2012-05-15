@@ -1,0 +1,35 @@
+<% @title = @record.title%>
+<div class="box">
+  <%= render :partial => '/users/user' ,:object => @record.user %>
+  <div class="bubble_tail"></div>
+  <div class="bubble">
+    <span>完成了为 <%= link_to @record.venue.name,@record.venue %> 的行动：</span>
+    <%= render :partial => "/records/shows/time"%>
+  </div>
+  <div style="clear:both;text-align:right">
+    <% if @record.owned_by?(current_user)%>
+      <span>
+        <%= link_to "修改信息",edit_record_path(@record)%> |
+        <%= link_to "删除","#{record_path(@record)}?",:method => :delete,:confirm => '你确定要删除这个行动记录么' %>
+      </span>
+    <% end %>
+  </div>
+</div>
+
+<% if @task%>
+  <div class="box">
+    <h4>行动来自<%= @task.user.login%>的任务:</h4>
+    <%= render :partial => "/public/task",:object => @task %>
+  </div>
+<% end %>
+
+<div class="box">
+  <h4>留言板：</h4>
+  <%= render :partial => '/public/comment' ,:collection => @comments %>
+</div>
+<%= render :partial => '/comments/form' ,:locals => {:commentable => @record}%>
+
+
+<% content_for :sidebar do %>
+  <%= render :partial => '/venues/intro' %>
+<% end %>

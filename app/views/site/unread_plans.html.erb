@@ -1,0 +1,14 @@
+<% @title = '新参与者'%>
+<% if @tasks.present? %>  
+  <div class="box">
+    <h4>以下任务有了新参与者：<h4>
+        <%= render :partial => "/public/task" ,:collection => @tasks %>
+      </div>
+    <% end %>
+
+    <% if @plans.present? %>  
+      <div class="box">
+        <h4>以下行动有了新的跟随者：<h4>
+            <%= render :partial => "/public/plan" ,:collection => @plans %>
+          </div>
+        <% end %>

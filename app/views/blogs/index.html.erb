@@ -1,0 +1,20 @@
+<% @title = '爱聚博客'%>
+
+<% @blogs.each do |blog|%>
+  <div class="box">
+    <div style="padding:6px 0;border-bottom:1px solid #ddd">
+      <%= image_tag '/images/icon/calendar.png',:class => 'icon' %>
+      <span><%= format_date(blog.created_at)%></span>
+      <span><%= link_to "#{blog.comments_count}条回复","#{blog_path(blog)}#comments" %> </span>
+    </div>
+    <h2><%= link_to blog.title,blog if false %></h2>
+    <div class="blog-content">
+      <%=raw blog.summary if false %>
+      <%= link_to '[继续阅读全文...]',blog_path(blog)%>
+    </div>
+  </div>
+<% end %>
+
+<% content_for :sidebar do %>  
+  <%= render :partial => '/blogs/sidebar' if false %>
+<% end %>

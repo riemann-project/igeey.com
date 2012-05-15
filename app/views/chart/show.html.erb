@@ -1,0 +1,115 @@
+<% @title = '数据统计'%>
+<% content_for :head do %>
+  <%= javascript_include_tag 'highcharts' %>
+<% end %>
+
+<div id="chart" class="div"></div>
+
+<% content_for :sidebar do %>
+  <div class="box">
+    <h4>历史总量</h4>
+    <ul>
+      <li>用户： <%= @users_total%></li>
+      <li>报到： <%= @sayings_total%></li>
+      <li>地点： <%= @venues_total%></li>
+      <li>任务： <%= @tasks_total%></li>
+      <li>计划： <%= @plans_total%></li>
+      <li>记录： <%= @records_total%></li>
+      <li>照片： <%= @photos_total%></li>
+      <li>留言： <%= @comments_total%></li>
+      <li>同步： <%= @syncs_total%></li>
+      <li>故事： <%= @topics_total%></li>
+      <li>问题： <%= @questions_total%></li>
+      <li>回答： <%= @answers_total%></li>
+      <li>话题： <%= @tags_total%></li>
+      <li>关注： <%= @follows_total%></li>
+    </ul>
+  </div>
+  <div>
+    <h4>数据对比</h4>
+    <ul>
+      <li>新浪同步 > <%= @sina_syncs%> vs <%= @douban_syncs%> < 豆瓣同步</li>
+      <li>直接参与 > <%= @directly_plans%> vs <%= @follow_plans %> < 跟随行动</li>
+    </ul>
+  </div>
+<% end %>
+
+<% content_for :extension do %>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+        new Highcharts.Chart({
+chart: {
+renderTo: 'chart',
+defaultSeriesType: 'line'
+},
+title: {text: '每日增长统计',},
+subtitle: {text: '<%= format_date(30.days.ago)%> - <%= format_date(Date.today)%>',y: 34},
+xAxis: {categories: []},
+yAxis: {
+title: {text: ''}
+},
+tooltip: {
+formatter: function() {
+return this.y;
+}
+},
+legend: {
+align: 'center',
+verticalAlign: 'bottom',
+borderWidth: 0,
+itemStyle: {
+cursor: 'pointer',
+        color: '#3E576F',
+        padding: '16px'
+}
+},
+series: [{
+name: '话题',
+      data: [<%= @tags_per_day.map{|a| "#{a},"}.to_s[0..-2] %>]
+        },{
+name: '问题',
+      data: [<%= @questions_per_day.map{|a| "#{a},"}.to_s[0..-2] %>]
+        },{
+name: '回答',
+      data: [<%= @answers_per_day.map{|a| "#{a},"}.to_s[0..-2] %>]
+        },{
+name: '地点',
+      data: [<%= @venues_per_day.map{|a| "#{a},"}.to_s[0..-2] %>]
+        }, {
+name: '用户',
+      data: [<%= @users_per_day.map{|a| "#{a},"}.to_s[0..-2] %>]
+        },{
+name: '照片',
+      data: [<%= @photos_per_day.map{|a| "#{a},"}.to_s[0..-2] %>]
+        },{
+name: '报到',
+      data: [<%= @sayings_per_day.map{|a| "#{a},"}.to_s[0..-2] %>]
+        },{
+name: '留言',
+        data: [<%= @comments_per_day.map{|a| "#{a},"}.to_s[0..-2] %>]
+        },{
+name: '同步',
+        data: [<%= @syncs_per_day.map{|a| "#{a},"}.to_s[0..-2] %>]
+        },{
+name: '故事',
+        data: [<%= @topics_per_day.map{|a| "#{a},"}.to_s[0..-2] %>]
+        },{
+name: '关注',
+        data: [<%= @follows_per_day.map{|a| "#{a},"}.to_s[0..-2] %>]
+        },{
+name: '任务',
+        data: [<%= @tasks_per_day.map{|a| "#{a},"}.to_s[0..-2] %>]
+        }, {
+name: '计划',
+        data: [<%= @plans_per_day.map{|a| "#{a},"}.to_s[0..-2] %>]
+        },{
+name: '记录',
+        data: [<%= @records_per_day.map{|a| "#{a},"}.to_s[0..-2] %>]
+        },]
+});
+$('.highcharts-legend:not tspan:gt(2)').click()
+});
+</script>
+
+<% end %>

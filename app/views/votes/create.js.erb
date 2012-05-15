@@ -1,0 +1,5 @@
+<% unless @vote.errors.empty? %>
+  alert('<%= @vote.errors.map{|msg| msg[1]} %>')
+<% else %>
+    $('#offset_counter_<%= @voteable.id %>').html('<%= @voteable.offset_count %>')
+<% end %>

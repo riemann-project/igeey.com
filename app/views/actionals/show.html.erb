@@ -1,0 +1,79 @@
+<%= stylesheet_link_tag 'controllers/actionals' %>
+
+<% @title = @actional.name%>
+
+<div class="box" id='showActional'>
+  <%= image_tag @actional.cover.url, :id => 'actionalCover', :class => 'action_cover' %>
+
+  <div style="margin-left:90px;">
+    <div id='actionalFav'>
+      <%= image_tag '/images/icon/fav.gif', :class => 'icon' %>
+      <span>
+        已有 <%= @actional.follows_count %> 人收藏
+      </span>
+    </div>
+    <h2>
+      <%= @actional.name %> 
+      <%= raw "<span>#{link_to '编辑', edit_actional_path(@actional)}</span>" if can? :edit, @anctional %>
+    </h2>
+    <pre class="explanation">
+      <%= @actional.intro if false %>
+    </pre>
+  </div>
+
+</div>
+
+<div id='iconAndMethod'>
+  <h4 id='icon'>
+    <%= image_tag "/images/icon/idea.gif",:class => 'icon' %> 行动方法
+  </h4>
+  <pre class="explanation">
+    <%= @actional.method if false %>
+  </pre>
+</div>
+
+<div id='backgroundShadow'>
+</div>
+
+<div class="box">
+  <h4>大家的行动：</h4>
+  <span>
+    <%= "暂时还没有关于#{@actional.name}的行动" if @timeline.empty? %>
+  </span>
+  <%= render :partial => "/public/item", :collection => @timeline %>
+</div>
+
+<% content_for :sidebar do %>
+
+  <div class="sidebar_panel" style="text-align:center">
+    <% if logged_in? && current_user.is_following?(@actional) %>
+      <%= link_to("已经收藏了", follow_path(@actional.follows.find_by_user_id(current_user.id)), :method => :delete,:class => 'big_button', :style=>"background:#ccc") %>
+    <% else %>
+      <%=  link_to("收藏这个行动","#{follows_path}?followable_type=#{@actional.class.to_s}&followable_id=#{@actional.id}",:method => :post,:class => 'big_button') %>
+    <% end %>
+    <p class="explanation" style="padding:5px;text-align:left">
+      收藏行动之后，你就可以在你关注的地点上直接使用你收藏的行动。
+    </p>
+  </div>
+
+  <div class="box">
+    <%= link_to "查看全部",questions_actional_path(@actional),:class => "see_all_link" if @actional.questions[5] %>
+    <h4>行动问答：</h4>
+    <%= render :partial => 'question', :collection => @actional.questions[0..4] %>
+    <% if logged_in? %>
+      <%= form_for @question do |form|%>
+        <p>
+        <%= form.text_field :title, :style => "width:240px;",:placeholder => "我要提问..." %>
+        <%= form.submit '添加问题', :style => "float:right;margin-top:5px;"%>
+        <%= form.hidden_field :tag_list, :value => @actional.tag.name %>
+        </p>
+      <% end %>
+    <% else %>
+      <p>
+      <%= link_to "立即登录", login_path,:class => "open_dialog" ,:title => '登录',:id => "login" %> 即可提问。
+      <%= render 'public/more_sync_link' %>
+      </p>
+    <% end %>
+  </div>
+
+<% end %>

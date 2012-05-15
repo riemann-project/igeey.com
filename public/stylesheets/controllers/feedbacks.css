@@ -1,0 +1,8 @@
+#feedbackContent{
+  border-bottom:1px dashed #999;
+  padding:10px;
+  margin-bottom:10px;
+}
+#feedbackText{
+	width:440px;height:80px;
+}

@@ -1,0 +1,21 @@
+<%= stylesheet_link_tag 'controllers/actionals' %>
+
+<h3>所有行动：</h3>
+<% @actionals.each do |actional| %>
+  <div class="action_box">
+
+    <div id='actionalIndex'>
+      <span id='actionalFollows'>
+      	<%= actional.follows_count %> 人收藏
+      </span>
+      <h4>
+        <%= link_to actional.name, actional %>
+      </h4>
+      <pre class="explanation">
+      	<%= truncate(actional.intro, :length => 36) %>
+      </pre>
+    </div>
+
+    <%= link_to(image_tag(actional.cover.url, :title => actional.name, :class => "action_cover"), actional, :alt => actional.name, :class => "action", :'data-action-id' => actional.id) %>
+  </div>
+<% end %>

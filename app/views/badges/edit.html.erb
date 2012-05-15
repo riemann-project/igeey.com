@@ -1,0 +1,22 @@
+<%= stylesheet_link_tag 'controllers/badges' %>
+
+<div class="box">
+
+  <%= form_for @badge, :html => { :multipart => true } do |form| %>
+
+    <%= image_tag @badge.cover.url('_120x120'), :style=> "float:left" %>
+
+    <div id='badgeContent'>
+      <%= form.label :name,'名称：'%> <%= form.text_field :name,:size => 8 %>
+      <br/>
+      <%= form.text_area :intro, :id => 'badgeIntro' if false %>
+      <%= form.label :condition_type,'条件类型：'%> 
+      <%= form.select :condition_factor, Badge::CONDITIONS_HASH.invert.to_a.sort_by{|value| value[1]} %>
+      <%= form.label :condition_number,'条件次数：'%>  <%= form.text_field :condition_number, :size => 3 %>
+      <%= form.file_field :cover, :id => 'badgeCover' %>
+      <%= submit_tag '确定' %>
+    </div>
+    
+  <% end %>
+
+</div>

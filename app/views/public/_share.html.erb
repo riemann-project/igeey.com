@@ -1,0 +1,30 @@
+<!-- JiaThis Button BEGIN -->
+<div id="ckepop" style="float:right;">
+  <span class="jiathis_txt">分享到：</span>
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_douban"></a>	
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a href="http://www.jiathis.com/share?uid=1532716" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config = {
+    <%= "title:'#{@share_title}'," if @share_title%>
+      <%= "pic:'#{@share_image}'," if @share_image%>
+      data_track_clickback:true,
+    appkey:{
+      "tsina":"2295864270"
+    },
+ralateuid:{
+            "tsina":"1864266521"
+          },
+  }
+
+</script>
+<% content_for :extension do %>
+  <script type="text/javascript" src="http://v2.jiathis.com/code_mini/jia.js?uid=1532716" charset="utf-8"></script>
+<% end %>
+<!-- JiaThis Button END -->
+
