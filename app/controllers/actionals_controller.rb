@@ -1,7 +1,7 @@
 # encoding: utf-8
 class ActionalsController < InheritedResources::Base
-  before_filter :login_required, :except => [:index, :show]
   before_filter :find_actional, :except => [:index, :new, :create]
+  before_filter :login_required, :except => [:index, :show]
   respond_to :html, :json
 
   def show

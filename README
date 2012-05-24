@@ -22,7 +22,6 @@ Step 5: init statics file
  
 Step 6: db migration & load fixtures 
   rake db:create
-  rake db:auto:migrate
   rake db:fixtures:load FIXTURES_PATH=db/fixtures
   
 Step 7: Go!launch!
