@@ -27,3 +27,5 @@ Step 6: db migration & load fixtures
   
 Step 7: Go!launch!
   rails s  
+
+增加一行
